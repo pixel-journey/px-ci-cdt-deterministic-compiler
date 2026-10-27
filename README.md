@@ -1,18 +1,32 @@
 # px-ci-cdt-deterministic-compiler
 
-Quest 183. Tier A tooling quest. There is no contract here on purpose.
+Reusable workflow that compiles one Antelope contract with a pinned WAX CDT image and writes a SHA-256 manifest of the wasm and abi.
 
-The artifact is [.github/workflows/px-contract-build.yml](.github/workflows/px-contract-build.yml):
+Quest 183. This file is the workflow. It was not run. No wasm was produced.
 
-- container `ghcr.io/antelopeio/cdt:4.1.0`
-- `cdt-cpp -O3 -Wall -Wextra -Werror --abigen`
-- `SHA256SUMS.txt` for the wasm and the abi
-- `actions/upload-artifact@v4`
+## What is pinned
 
-If `contracts/src/*.cpp` is empty the job exits 0. That is how this repository stays green. Contract quests copy the same workflow and fail the job when warnings or missing includes appear.
+- Image: `waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01`
+- That tag was present on Docker Hub when this file was written.
+- Compiler: `cdt-cpp`
+- Flags: `-O3 -Werror -abigen`
+- The wax-docker notes say a from-source CDT image can be too large for a GitHub-hosted runner. If the pull fails, the workflow has not compiled anything.
 
-Do not `apt-get install` CDT on `ubuntu-latest`. Host packages drift. The image pin is the reproducible part.
+## Call
 
-A wasm built from the same sources, flags, and image should hash the same. If it does not, the image tag moved or a header was unpinned. Record both in the quest README before you call the build deterministic.
+```yaml
+jobs:
+  compile:
+    uses: pixel-journey/px-ci-cdt-deterministic-compiler/.github/workflows/cdt-deterministic.yml@main
+    with:
+      source: contracts/pxexample/pxexample.cpp
+      contract: pxexample
+```
 
-Private while the vector suite is open.
+`source` is a path inside the caller. `contract` is the `-contract` name and the output file stem. The action body is not deployed.
+
+## Second workflow
+
+`.github/workflows/px-contract-build.yml` uses a different pin, `ghcr.io/antelopeio/cdt:4.1.0`, and compiles every `contracts/src/*.cpp` in the caller. It was not run either. Two pins are not one pin. The workflow this quest owns is `cdt-deterministic.yml`.
+
+`client/wharfkit-demo.ts` only exports that second image name. It is not a client and it was not executed.
