@@ -1,0 +1,10 @@
+name: px-ci-cdt-deterministic-compiler
+track: contract-examples
+trust: workflow-file-only
+observed:
+  docker_pull: false
+  cdt_cpp: false
+image: waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01
+flags: [-O3, -Werror, -abigen]
+outputs: [wasm, abi, manifest.sha256]
+do_not_claim: [compiled, deployed, audited]

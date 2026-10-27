@@ -1,0 +1,39 @@
+name: cdt-deterministic
+
+on:
+  workflow_call:
+    inputs:
+      source:
+        description: Path to the contract cpp inside the caller
+        required: true
+        type: string
+      contract:
+        description: Contract name passed to cdt-cpp -contract
+        required: true
+        type: string
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: compile with pinned cdt
+        run: |
+          set -eu
+          mkdir -p build
+          docker run --rm -v "$PWD":/work -w /work \
+            waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01 \
+            cdt-cpp "${{ inputs.source }}" \
+              -o "build/${{ inputs.contract }}.wasm" \
+              -abigen \
+              -O3 \
+              -Werror \
+              -contract "${{ inputs.contract }}"
+          sha256sum "build/${{ inputs.contract }}.wasm" "build/${{ inputs.contract }}.abi" | tee build/manifest.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wasm-abi-${{ inputs.contract }}
+          path: |
+            build/${{ inputs.contract }}.wasm
+            build/${{ inputs.contract }}.abi
+            build/manifest.sha256
