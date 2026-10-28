@@ -2,15 +2,14 @@
 
 Reusable workflow that compiles one Antelope contract with a pinned WAX CDT image and writes a SHA-256 manifest of the wasm and abi.
 
-Quest 183. This file is the workflow. It was not run. No wasm was produced.
+This file is the workflow. It has not been run. No wasm has been produced.
 
 ## What is pinned
 
 - Image: `waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01`
-- That tag was present on Docker Hub when this file was written.
 - Compiler: `cdt-cpp`
 - Flags: `-O3 -Werror -abigen`
-- The wax-docker notes say a from-source CDT image can be too large for a GitHub-hosted runner. If the pull fails, the workflow has not compiled anything.
+- Output: SHA-256 manifest of the wasm and the abi
 
 ## Call
 
@@ -23,10 +22,10 @@ jobs:
       contract: pxexample
 ```
 
-`source` is a path inside the caller. `contract` is the `-contract` name and the output file stem. The action body is not deployed.
+`source` is a path inside the caller. `contract` is the `-contract` name and the output file stem.
 
-## Second workflow
+## Dispatch
 
-`.github/workflows/px-contract-build.yml` uses a different pin, `ghcr.io/antelopeio/cdt:4.1.0`, and compiles every `contracts/src/*.cpp` in the caller. It was not run either. Two pins are not one pin. The workflow this quest owns is `cdt-deterministic.yml`.
+The workflow is `workflow_dispatch` only. It has not been triggered. Until it is run and a manifest is committed, there is no verified wasm.
 
-`client/wharfkit-demo.ts` only exports that second image name. It is not a client and it was not executed.
+A second workflow file uses a different pin. Two pins are not one pin. The workflow this repository owns is `cdt-deterministic.yml`.
