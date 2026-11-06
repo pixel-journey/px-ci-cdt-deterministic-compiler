@@ -1,18 +1,27 @@
+/** Attack / honesty notes that match the workflow files. Not a compile claim. */
 export const invariants = [
   {
-    id: "pinned-image",
-    expect: "The workflow container is ghcr.io/antelopeio/cdt:4.1.0 and not ubuntu-latest plus a package install.",
+    id: "owned-pinned-image",
+    expect:
+      "cdt-deterministic.yml pins waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01. That is the owned quest pin.",
+  },
+  {
+    id: "secondary-pinned-image",
+    expect:
+      "px-contract-build.yml pins ghcr.io/antelopeio/cdt:4.1.0. Two pins are not one pin.",
   },
   {
     id: "warnings-are-failures",
-    expect: "-Werror is present. A warning fails the job.",
+    expect: "Owned workflow passes -Werror. A warning fails the job when it runs.",
   },
   {
-    id: "tooling-only",
-    expect: "An empty contracts/src directory exits 0 instead of failing cdt-cpp.",
+    id: "tooling-only-secondary",
+    expect:
+      "Secondary workflow: empty contracts/src exits 0 instead of failing cdt-cpp.",
   },
   {
     id: "manifest",
-    expect: "The job writes SHA256SUMS.txt for wasm and abi when those files exist.",
+    expect:
+      "Owned workflow tees build/manifest.sha256 when wasm and abi exist. No manifest is claimed here until a run is recorded.",
   },
 ];
