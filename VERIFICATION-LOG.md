@@ -1,13 +1,14 @@
 # Verification Log
 
 **Trust:** workflow-file-only  
-**Updated:** 2026-10-29
+**Updated:** 2026-11-06
 
 | Claim | Status | Evidence |
 | --- | --- | --- |
 | `cdt-deterministic.yml` exists and is callable | **documented** | `.github/workflows/cdt-deterministic.yml` |
-| Pin `waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01` written in owned workflow | **documented** | same file |
-| Flags `-O3 -Werror -abigen` written | **documented** | same file |
+| Pin `waxteam/cdt:ce-v1.3.1wax01-v4.1.1wax01` written in owned workflow | **documented** | same file; `invariants/pins.ts` + tests |
+| Flags `-O3 -Werror -abigen` written | **documented** | same file; pin tests |
+| Owned pin ≠ secondary pin | **tested** | `invariants/pins.test.ts` |
 | Workflow executed successfully | **not claimed** | no run recorded |
 | Docker image pulled | **not claimed** | |
 | wasm / abi produced | **not claimed** | |
