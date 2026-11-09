@@ -3,9 +3,15 @@ name: compile-ping
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   compile:
-    uses: pixel-journey/px-ci-cdt-deterministic-compiler/.github/workflows/cdt-deterministic.yml@main
+    permissions:
+      contents: read
+      actions: write
+    uses: ./.github/workflows/cdt-deterministic.yml
     with:
       source: contracts/ping/ping.cpp
       contract: ping
