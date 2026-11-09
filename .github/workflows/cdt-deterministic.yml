@@ -12,9 +12,15 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   compile:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: compile with pinned cdt
