@@ -1,0 +1,11 @@
+name: compile-ping
+
+on:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    uses: pixel-journey/px-ci-cdt-deterministic-compiler/.github/workflows/cdt-deterministic.yml@main
+    with:
+      source: contracts/ping/ping.cpp
+      contract: ping
